@@ -1,5 +1,10 @@
-import ReplicatorSender
 import rpyc
+
+def open_connection():
+    pass
+
+def close_connection(conn):
+    pass
 
 
 def send_data(conn):
