@@ -1,10 +1,16 @@
 import rpyc
 
+
 def open_connection():
-    pass
+    # connecting to ReplicatorSenderService
+    conn = rpyc.connect("localhost", 22277)
+    print("Writer connected.")
+    return conn
 
 def close_connection(conn):
-    pass
+    # disconnecting from ReplicatorSenderService
+    del conn
+    print("Writer disconnected.")
 
 
 def send_data(conn):
@@ -34,7 +40,3 @@ if __name__ == "__main__":
         if(exit.lower == 'exit'):
             close_connection(conn)
             break    
-
-        
-
-
