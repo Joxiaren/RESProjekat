@@ -12,20 +12,24 @@ def close_connection(conn):
     del conn
     print("Writer disconnected.")
 
+def input_data():
+    pass
+
 
 def send_data(conn):
     # here we should call function input_Data()
-    # try:
-    #   idCounter, currentWaterConsuption = input_Data()
-    #   dict =
-    #         {
-    #            "idCounter" : idCounter,
-    #            "currentWaterCounsuption" : currentWaterConsuption
-    #          }
-    #  except TypeError as e:
-    #    print(e)
+    try:
+        idCounter, currentWaterConsuption = input_data()
+        dict = {
+            "idCounter" : idCounter,
+            "currentWaterConsuption" : currentWaterConsuption
+        }
+        conn.root.send_to_replicator(dict)
+    except TypeError as e:
+       print(e)
 
-    conn.root.send_to_replicator(dict)
+
+
 
 
 if __name__ == "__main__": 
