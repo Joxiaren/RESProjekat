@@ -1,5 +1,14 @@
 import rpyc
 
+def check_input_data(idCounter,currentWaterCounsuption):
+    if type(idCounter)!=int:
+        raise TypeError("Water meter ID must be an integer!")
+    if type(currentWaterCounsuption)==int or type(currentWaterCounsuption)==float:
+        pass
+    else:
+        raise TypeError("The consumption is not a number!")
+    return idCounter,currentWaterCounsuption
+
 
 def open_connection():
     # connecting to ReplicatorSenderService
@@ -16,13 +25,13 @@ def input_data():
     pass
 
 
-def send_data(conn):
+def send_data(conn,idCounter,currentWaterCounsuption):
     # here we should call function input_Data()
     try:
-        idCounter, currentWaterConsuption = input_data()
+        id, wc = check_input_data(idCounter,currentWaterCounsuption)
         dict = {
-            "idCounter" : idCounter,
-            "currentWaterConsuption" : currentWaterConsuption
+            "idCounter" : id,
+            "currentWaterConsuption" : wc
         }
         conn.root.send_to_replicator(dict)
     except TypeError as e:
@@ -45,11 +54,11 @@ if __name__ == "__main__":
             action = int(input())
             if(action == 2):
                 break
-            send_data(conn)
+            print("Water meter ID: ")
+            idCounter=int(input())
+            print("Water consumption for that meter ID: ")
+            currentWaterCounsuption= float(input())
+            send_data(conn,idCounter,currentWaterCounsuption)
             print("Data successfully sent")
         except:
             print("You have to enter number!")
-
-
-
-
