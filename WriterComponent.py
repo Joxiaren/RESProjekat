@@ -7,9 +7,7 @@ def check_input_data(idCounter,currentWaterCounsuption):
         pass
     else:
         raise TypeError("The consumption is not a number!")
-    dict = {}
-    dict[idCounter]=currentWaterCounsuption
-    return dict
+    return idCounter,currentWaterCounsuption
 
 
 def open_connection():
@@ -48,7 +46,6 @@ if __name__ == "__main__":
         print("Water consumption for that meter ID: ")
         currentWaterCounsuption= input()
 
-        sendDict = check_input_data(idCounter,currentWaterCounsuption)
         send_data(conn)
 
         print("For exit enter 'exit': ")
