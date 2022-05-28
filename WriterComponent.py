@@ -1,18 +1,15 @@
 import rpyc
 
-def input_data():
-    print("Water meter ID: ")
-    idCounter=input()
+def check_input_data(idCounter,currentWaterCounsuption):
     if type(idCounter)!=int:
         raise TypeError("Water meter ID must be an integer!")
-    print("Water consumption for that meter ID: ")
-    currentWaterCounsuption= input()
     if type(currentWaterCounsuption)==int or type(currentWaterCounsuption)==float:
         pass
     else:
         raise TypeError("The consumption is not a number!")
-
-    return idCounter,currentWaterCounsuption
+    dict = {}
+    dict[idCounter]=currentWaterCounsuption
+    return dict
 
 
 def open_connection():
@@ -46,7 +43,12 @@ if __name__ == "__main__":
     conn = open_connection()
 
     while(True):
-        
+        print("Water meter ID: ")
+        idCounter=input()
+        print("Water consumption for that meter ID: ")
+        currentWaterCounsuption= input()
+
+        sendDict = check_input_data(idCounter,currentWaterCounsuption)
         send_data(conn)
 
         print("For exit enter 'exit': ")
