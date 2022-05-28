@@ -21,18 +21,24 @@ def close_connection(conn):
     del conn
     print("Writer disconnected.")
 
+def input_data():
+    pass
 
-def send_data(conn):
+
+def send_data(conn,idCounter,currentWaterCounsuption):
     # here we should call function input_Data()
-    # idCounter, currentWaterConsuption = input_Data()
-    # dict =
-    #       {
-    #          "idCounter" : idCounter,
-    #          "currentWaterCounsuption" : currentWaterConsuption    
-    #       }
-    #
-    
-    conn.root.send_to_replicator(dict)
+    try:
+        id, wc = check_input_data(idCounter,currentWaterCounsuption)
+        dict = {
+            "idCounter" : id,
+            "currentWaterConsuption" : wc
+        }
+        conn.root.send_to_replicator(dict)
+    except TypeError as e:
+       print(e)
+
+
+
 
 
 if __name__ == "__main__": 
@@ -41,15 +47,18 @@ if __name__ == "__main__":
     conn = open_connection()
 
     while(True):
-        print("Water meter ID: ")
-        idCounter=input()
-        print("Water consumption for that meter ID: ")
-        currentWaterCounsuption= input()
-
-        send_data(conn)
-
-        print("For exit enter 'exit': ")
-        exit = input()
-        if(exit.lower == 'exit'):
-            close_connection(conn)
-            break    
+        print("Enter the number of action: ")
+        print("1 - Input and send data: ")
+        print("2 - Exit")
+        try:
+            action = int(input())
+            if(action == 2):
+                break
+            print("Water meter ID: ")
+            idCounter=int(input())
+            print("Water consumption for that meter ID: ")
+            currentWaterCounsuption= float(input())
+            send_data(conn,idCounter,currentWaterCounsuption)
+            print("Data successfully sent")
+        except:
+            print("You have to enter number!")
