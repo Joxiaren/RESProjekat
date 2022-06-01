@@ -1,6 +1,6 @@
 import sqlite3
 
-#create table that describes Water Meter
+# create table that describes Water Meter
 try:
     connWaterMeter = sqlite3.connect('WaterMeter.db')
 
@@ -11,8 +11,8 @@ try:
             idMeter       int      PRIMARY KEY     NOT NULL,
             name          text,
             lastName      text, 
-            street        text,
-            numberStreet  int,  
+            streetName    text,
+            streetNumber  int,  
             postNumber    int,  
             city          text);  """)
     connWaterMeter.commit()
@@ -28,9 +28,11 @@ try:
 
     cursorWaterConsumption = connWaterConsumption.cursor()
 
+    # ovde ne treba da se ima primary key, ali to cu da proverim
+
     cursorWaterConsumption.execute("""
         CREATE TABLE WATER_CONSUMPTION(
-            idMeter         int      PRIMARY KEY      NOT NULL,
+            idMeter         int,
             consumption     real,
             month           text);  """)
 
@@ -38,4 +40,5 @@ try:
     print("Successfully created table WATER_CONSUMPTION")
 except Exception as eWCON:
     print(eWCON)
+
 
