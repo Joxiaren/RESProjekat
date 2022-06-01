@@ -28,8 +28,6 @@ try:
 
     cursorWaterConsumption = connWaterConsumption.cursor()
 
-    # ovde ne treba da se ima primary key, ali to cu da proverim
-
     cursorWaterConsumption.execute("""
         CREATE TABLE WATER_CONSUMPTION(
             idMeter         int,
