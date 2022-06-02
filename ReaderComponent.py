@@ -1,0 +1,2 @@
+def writeToDatabase(data):
+    pass

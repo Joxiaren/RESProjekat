@@ -30,8 +30,8 @@ def send_data(conn,idCounter,currentWaterCounsuption):
     try:
         id, wc = check_input_data(idCounter,currentWaterCounsuption)
         dict = {
-            "idCounter" : id,
-            "currentWaterConsuption" : wc
+            "idMeter" : id,
+            "consumption" : wc
         }
         conn.root.send_to_replicator(dict)
     except TypeError as e:
