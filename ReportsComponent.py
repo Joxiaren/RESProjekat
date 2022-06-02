@@ -14,7 +14,7 @@ def printReportForSpecificStreet(street, data):
     print("Water consumption in street: " + street)
     print("----------------------------------------------------")
     for month in data:
-        print(month + " : " + data[month])
+        print(month + " : " + str(data[month]))
 
     print("----------------------------------------------------")
     return
@@ -25,7 +25,7 @@ def printReportForSpecificCounter(idCounter, data):
     print("Water consumption on specific water meter with id: " + idCounter)
     print("----------------------------------------------------")
     for month in data:
-        print(month + " : " + data[month])
+        print(month + " : " + str(data[month]))
 
     print("----------------------------------------------------")
     return
