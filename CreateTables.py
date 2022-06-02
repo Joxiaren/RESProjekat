@@ -29,10 +29,11 @@ try:
     cursorWaterConsumption = connWaterConsumption.cursor()
 
     cursorWaterConsumption.execute("""
-        CREATE TABLE WATER_CONSUMPTION(
-            idMeter         int,
-            consumption     real,
-            month           text);  """)
+           CREATE TABLE WATER_CONSUMPTION(
+               idMeter         int   NOT NULL,
+               consumption     real,
+               month           text  NOT NULL,
+               PRIMARY KEY(idMeter, month));  """)
 
     connWaterConsumption.commit()
     print("Successfully created table WATER_CONSUMPTION")
