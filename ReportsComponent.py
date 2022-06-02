@@ -22,7 +22,7 @@ def printReportForSpecificStreet(street, data):
 
 def printReportForSpecificCounter(idCounter, data):
     # data is Dictionary<string, float> with name of month as a key and water consumption as value
-    print("Water consumption on specific water meter with id: " + idCounter)
+    print("Water consumption on specific water meter with id: " + str(idCounter))
     print("----------------------------------------------------")
     for month in data:
         print(month + " : " + str(data[month]))
