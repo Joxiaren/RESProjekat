@@ -2,15 +2,13 @@ import sqlite3
 
 
 # help function
-# def deleteRow(cursor, idMeter):
-#    cursor.execute('''
-#   delete from WATER_METER
-#   where idMeter = :idMeter;''', {'idMeter' : idMeter})
-
-# help function
 def printRows(cursor):
     cursor.execute("SELECT * from WATER_METER;")
     rows = cursor.fetchall()
+    if (len(rows) == 0):
+        print("Table doesn't contain any data")
+        return
+
     for i in rows:
         print(i)
 
@@ -58,5 +56,8 @@ if __name__ == "__main__":
     cursor = conn.cursor()
 
     insertData(cursor)
-    #printRows(cursor)
+    printRows(cursor)
+    conn.close()
+
+
 
