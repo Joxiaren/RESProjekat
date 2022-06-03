@@ -1,3 +1,14 @@
+def openConnectionToDB():
+    #here we should return conn variable that represents connection to WATER_CONSUMPTION or WATER_METER DB
+    #suggestion: as a parameter, we can add name of DB such as "WaterMeter.db" or "WaterConsumption.db"
+    conn = 0 # added 0 because variable not declared
+    return conn
+
+def closeConnectionToDB(conn):
+    # closing connection to db
+    return
+
+
 def getReportForSpecificStreet(street):
     # should return Dictionary<string, float> with name of month as a key and water consumption in specific STREET as value
     return
@@ -5,7 +16,37 @@ def getReportForSpecificStreet(street):
 
 def getReportForSpecificCounter(idCounter):
     # should return Dictionary<string, float> with name of month as a key and water consumption on specific COUNTER as value
-    return
+    if (type(idCounter) != int):
+        raise TypeError("Id Counter have to be whole number ")
+
+    report = {
+        'January': 0,
+        'February': 0,
+        'March': 0,
+        'April': 0,
+        'May': 0,
+        'June': 0,
+        'July': 0,
+        'August': 0,
+        'September': 0,
+        'October': 0,
+        'November': 0,
+        'December': 0
+    }
+    #conn = sqlite3.connect("WaterConsumption.db")
+    conn = openConnectionToDB()
+    cursor = conn.cursor()
+    cursor.execute('''select month, consumption
+               from water_consumption 
+               where idMeter = :idMeter''', {'idMeter': idCounter})
+    listOfTuples = cursor.fetchall()
+
+    for tuple in listOfTuples:
+        report[tuple[0]] = tuple[1]
+
+    closeConnectionToDB(conn)
+    return report
+
 
 
 
