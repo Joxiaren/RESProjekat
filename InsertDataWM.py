@@ -1,18 +1,5 @@
 import sqlite3
 
-
-# help function
-def printRows(cursor):
-    cursor.execute("SELECT * from WATER_METER;")
-    rows = cursor.fetchall()
-    if (len(rows) == 0):
-        print("Table doesn't contain any data")
-        return
-
-    for i in rows:
-        print(i)
-
-
 def insertData(cursor):
     try:
         cursor.execute('''
@@ -44,8 +31,8 @@ def insertData(cursor):
             (20, 'Boris', 'Radic', 'Rackog', 102, 21131, 'Petrovaradin'),
             (21, 'Ana', 'Minic', 'Rackog', 11, 21131, 'Petrovaradin');''')
 
-        conn.commit();
-
+        conn.commit()
+        print("Successfully inserted data in DB")
     except Exception as e:
         print(e)
 
@@ -56,7 +43,6 @@ if __name__ == "__main__":
     cursor = conn.cursor()
 
     insertData(cursor)
-    printRows(cursor)
     conn.close()
 
 
