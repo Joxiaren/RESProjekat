@@ -1,9 +1,7 @@
-from sqlite3 import Timestamp
 import time
 import rpyc
 
 data_list = []
-
 
 class Data():
     def __init__(self,dictionary,timestamp):
@@ -11,21 +9,21 @@ class Data():
         self.timestamp=timestamp
 
 class ReplicatorReceiver():
-    def open_connection():
+    def open_connection(self):
         # connecting to ReaderService
         conn = rpyc.connect("localhost", 32777)
         print("Replicator receiver connected.")
         return conn
 
-    def close_connection(conn):
+    def close_connection(self,conn):
         # disconnecting from ReaderService
         del conn
         print("Replicator receiver disconnected.")
 
-    def temporary_store_data(data):
+    def temporary_store_data(self,data):
         data_list.append(Data(data,time.time()))
         
-    def send_data(conn, data):
+    def send_data(self,conn, data):
         conn.root.send_to_reader(data)
 
 
