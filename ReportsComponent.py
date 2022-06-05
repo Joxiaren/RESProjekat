@@ -1,6 +1,9 @@
+import sqlite3
+
+
 def openConnectionToDB():
     #here we should return conn variable that represents connection to WATER_CONSUMPTION or WATER_METER DB
-    #suggestion: as a parameter, we can add name of DB such as "WaterMeter.db" or "WaterConsumption.db"
+    #suggestion: as a parameter, we can add name of DB such as "DataBase.db"
     conn = 0 # added 0 because variable not declared
     return conn
 
@@ -9,15 +12,20 @@ def closeConnectionToDB(conn):
     return
 
 
-def getReportForSpecificStreet(street):
+def getReportForSpecificStreet(street, dbName):
     # should return Dictionary<string, float> with name of month as a key and water consumption in specific STREET as value
     return
 
 
-def getReportForSpecificCounter(idCounter):
+def getReportForSpecificMeter(idMeter, dbName):
     # should return Dictionary<string, float> with name of month as a key and water consumption on specific COUNTER as value
-    if (type(idCounter) != int):
-        raise TypeError("Id Counter have to be whole number ")
+    if (type(idMeter) != int):
+        raise TypeError("Id Meter have to be whole number ")
+    if (type(dbName) != str):
+        raise TypeError("Name of DB have to be string!")
+    if (dbName != "DataBase.db" and dbName != "testDataBase.db"):
+        raise sqlite3.OperationalError("Incorrect name of DB")
+
 
     report = {
         'January': 0,
@@ -33,12 +41,12 @@ def getReportForSpecificCounter(idCounter):
         'November': 0,
         'December': 0
     }
-    #conn = sqlite3.connect("WaterConsumption.db")
-    conn = openConnectionToDB()
+
+    conn = openConnectionToDB(dbName)
     cursor = conn.cursor()
     cursor.execute('''select month, consumption
                from water_consumption 
-               where idMeter = :idMeter''', {'idMeter': idCounter})
+               where idMeter = :idMeter''', {'idMeter': idMeter})
     listOfTuples = cursor.fetchall()
 
     for tuple in listOfTuples:
@@ -61,9 +69,9 @@ def printReportForSpecificStreet(street, data):
     return
 
 
-def printReportForSpecificCounter(idCounter, data):
+def printReportForSpecificMeter(idMeter, data):
     # data is Dictionary<string, float> with name of month as a key and water consumption as value
-    print("Water consumption on specific water meter with id: " + str(idCounter))
+    print("Water consumption on specific water meter with id: " + str(idMeter))
     print("----------------------------------------------------")
     for month in data:
         print(month + " : " + str(data[month]))
@@ -85,16 +93,16 @@ class WrongNumberOfArguments(Exception):
 
 
 
-def printFormatedReports(typeOfReport, street="", idCounter=-1):
+def printFormatedReports(typeOfReport, street="", idMeter=-1):
 
     if (typeOfReport == "street") and (street != ""):
-        dict = getReportForSpecificStreet(street)
+        dict = getReportForSpecificStreet(street, "DataBase.db")
         printReportForSpecificStreet(street, dict)
         return
 
-    elif (typeOfReport == "id") and (idCounter != -1):
-        dict = getReportForSpecificCounter(idCounter)
-        printReportForSpecificCounter(idCounter, dict)
+    elif (typeOfReport == "id") and (idMeter != -1):
+        dict = getReportForSpecificMeter(idMeter, "DataBase.db")
+        printReportForSpecificMeter(idMeter, dict)
         return
 
     else:
