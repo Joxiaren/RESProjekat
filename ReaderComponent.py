@@ -1,3 +1,4 @@
+
 def connectToDatabase():
     pass
 
@@ -19,3 +20,4 @@ def writeToDatabase(data):
             disconnectFromDatabase(conn)
     except Exception as e:
         print(e)
+
