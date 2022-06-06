@@ -1,7 +1,5 @@
 import sqlite3
 
-import sqlite3
-
 # create table that describes Water Meter
 try:
     conn = sqlite3.connect('DataBase.db')
