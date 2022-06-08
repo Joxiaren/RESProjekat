@@ -1,7 +1,9 @@
 import sqlite3
 
-def insertData(cursor):
+
+def insertData(conn):
     try:
+        cursor = conn.cursor()
         cursor.execute('''
         INSERT INTO WATER_METER (idMeter, name, lastName, streetName, streetNumber, postNumber, city)
         VALUES
@@ -39,11 +41,10 @@ def insertData(cursor):
 
 if __name__ == "__main__":
     # create connection to WaterMeter.db
-    conn = sqlite3.connect('WaterMeter.db')
-    cursor = conn.cursor()
+    conn = sqlite3.connect('DataBase.db')
 
-    insertData(cursor)
+    insertData(conn)
+
     conn.close()
-
 
 
