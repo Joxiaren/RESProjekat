@@ -117,6 +117,7 @@ def input_num(number, upper_limit=None):
 
 
 def main():
+    user_input = 0
     while True:
         print("Enter number in front of desired report")
         print("1. Report for monthly consumption of a single street")
