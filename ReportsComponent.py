@@ -109,10 +109,9 @@ def printFormatedReports(typeOfReport, street="", idMeter=-1):
         raise WrongNumberOfArguments()
 
 
-def input_num(number, limit=-1):
-
+def input_num(number, upper_limit=None):
     user_input = int(number)
-    if number <= 0 or (limit != -1 and number > limit):
+    if user_input <= 0 or (upper_limit is not None and user_input > upper_limit):
         raise InputOutOfRange
     return user_input
 
