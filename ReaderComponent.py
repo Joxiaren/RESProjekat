@@ -1,16 +1,21 @@
+import sqlite3
 
-def connectToDatabase():
-    pass
+@staticmethod
+def connectToDatabase(dbName):
+    connection_string = 'file:%s?mode=rw' % dbName
+    conn = sqlite3.connect(dbName)
+    return conn
 
 
+@staticmethod
 def disconnectFromDatabase(conn):
-    pass
-
+    conn.close()
+    return
 
 def writeToDatabase(data):
-#data is list of dictionaries
+    # data is list of dictionaries
     try:
-        conn = connectToDatabase()
+        conn = connectToDatabase('DataBase.db')
         cursor = conn.cursor()
 
         for dictionary in data:
