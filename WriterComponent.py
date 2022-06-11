@@ -86,3 +86,4 @@ class InputOutOfRange(Exception):
         if self.message is None:
             return "Input number is out of option range"
         return self.message
+    
