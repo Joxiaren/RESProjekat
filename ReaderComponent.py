@@ -1,3 +1,4 @@
+import sqlite3
 import rpyc
 from rpyc.utils.server import ThreadedServer
 
@@ -23,25 +24,30 @@ class ReaderComponentService(rpyc.Service):
         # send to temporary storage
         # send_to_temp_storage(data)
 
-def connectToDatabase():
-    pass
+@staticmethod
+def connect_to_database(db_name):
+    connection_string = 'file:%s?mode=rw' % db_name
+    conn = sqlite3.connect(connection_string, uri=True)
+    return conn
 
 
-def disconnectFromDatabase(conn):
-    pass
+@staticmethod
+def disconnect_from_database(conn):
+    conn.close()
+    return
 
 
-def writeToDatabase(data):
-#data is list of dictionaries
+def write_to_database(data):
+    # data is list of dictionaries
     try:
-        conn = connectToDatabase()
+        conn = connect_to_database('DataBase.db')
         cursor = conn.cursor()
 
         for dictionary in data:
             cursor.execute("INSERT INTO WATER_CONSUMPTION (idMeter, consumption, month) VALUES (:idMeter, :consumption, :month);",
                            {'idMeter': dictionary["idMeter"], 'consumption': dictionary["consumption"], 'month': dictionary["month"]})
             conn.commit()
-        disconnectFromDatabase(conn)
+        disconnect_from_database(conn)
     except Exception as e:
         print(e)
 
