@@ -24,9 +24,13 @@ class ReplicatorSenderService(rpyc.Service):
         # send_to_temp_storage(data)
 
 
-if __name__ == "__main__":
+def main():
     server = ThreadedServer(ReplicatorSenderService(), port=22277)
     print("server started")
     server.start()
+
+
+if __name__ == "__main__":
+    main()
 
 
