@@ -4,7 +4,7 @@ import sqlite3
 @staticmethod
 def connect_to_database(db_name):
     connection_string = 'file:%s?mode=rw' % db_name
-    conn = sqlite3.connect(db_name)
+    conn = sqlite3.connect(connection_string, uri=True)
     return conn
 
 
