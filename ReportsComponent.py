@@ -1,14 +1,14 @@
 import sqlite3
 
 
-def openConnectionToDB():
-    #here we should return conn variable that represents connection to WATER_CONSUMPTION or WATER_METER DB
-    #suggestion: as a parameter, we can add name of DB such as "DataBase.db"
-    conn = 0 # added 0 because variable not declared
+def open_connection_to_db(db_name):
+    connection_string = 'file:%s?mode=rw' % db_name
+    conn = sqlite3.connect(connection_string, uri=True)
     return conn
 
-def closeConnectionToDB(conn):
-    # closing connection to db
+
+def close_connection_to_db(conn):
+    conn.close()
     return
 
 
@@ -42,7 +42,7 @@ def getReportForSpecificMeter(idMeter, dbName):
         'December': 0
     }
 
-    conn = openConnectionToDB(dbName)
+    conn = open_connection_to_db(dbName)
     cursor = conn.cursor()
     cursor.execute('''select month, consumption
                from water_consumption 
@@ -52,7 +52,7 @@ def getReportForSpecificMeter(idMeter, dbName):
     for tuple in listOfTuples:
         report[tuple[0]] = tuple[1]
 
-    closeConnectionToDB(conn)
+    close_connection_to_db(conn)
     return report
 
 
