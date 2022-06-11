@@ -48,7 +48,7 @@ def main():
             sent_items = []  # zero the buffer
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()
 
 
