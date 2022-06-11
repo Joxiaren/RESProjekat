@@ -12,20 +12,19 @@ def close_connection_to_db(conn):
     return
 
 
-def getReportForSpecificStreet(street, dbName):
+def get_report_for_specific_street(street, db_name):
     # should return Dictionary<string, float> with name of month as a key and water consumption in specific STREET as value
     return
 
 
-def getReportForSpecificMeter(idMeter, dbName):
+def get_report_for_specific_meter(id_meter, db_name):
     # should return Dictionary<string, float> with name of month as a key and water consumption on specific COUNTER as value
-    if (type(idMeter) != int):
+    if type(id_meter) != int:
         raise TypeError("Id Meter have to be whole number ")
-    if (type(dbName) != str):
+    if type(db_name) != str:
         raise TypeError("Name of DB have to be string!")
-    if (dbName != "DataBase.db" and dbName != "testDataBase.db"):
+    if db_name != "DataBase.db" and db_name != "testDataBase.db":
         raise sqlite3.OperationalError("Incorrect name of DB")
-
 
     report = {
         'January': 0,
@@ -42,23 +41,21 @@ def getReportForSpecificMeter(idMeter, dbName):
         'December': 0
     }
 
-    conn = open_connection_to_db(dbName)
+    conn = open_connection_to_db(db_name)
     cursor = conn.cursor()
     cursor.execute('''select month, consumption
                from water_consumption 
-               where idMeter = :idMeter''', {'idMeter': idMeter})
-    listOfTuples = cursor.fetchall()
+               where idMeter = :idMeter''', {'idMeter': id_meter})
+    list_of_tuples = cursor.fetchall()
 
-    for tuple in listOfTuples:
-        report[tuple[0]] = tuple[1]
+    for t in list_of_tuples:
+        report[t[0]] = t[1]
 
     close_connection_to_db(conn)
     return report
 
 
-
-
-def printReportForSpecificStreet(street, data):
+def print_report_for_specific_street(street, data):
     # data is Dictionary<string, float> with name of month as a key and water consumption as value
     print("Water consumption in street: " + street)
     print("----------------------------------------------------")
@@ -69,16 +66,15 @@ def printReportForSpecificStreet(street, data):
     return
 
 
-def printReportForSpecificMeter(idMeter, data):
+def print_report_for_specific_meter(id_meter, data):
     # data is Dictionary<string, float> with name of month as a key and water consumption as value
-    print("Water consumption on specific water meter with id: " + str(idMeter))
+    print("Water consumption on specific water meter with id: " + str(id_meter))
     print("----------------------------------------------------")
     for month in data:
         print(month + " : " + str(data[month]))
 
     print("----------------------------------------------------")
     return
-
 
 
 class WrongNumberOfArguments(Exception):
@@ -92,17 +88,16 @@ class WrongNumberOfArguments(Exception):
             return self.message
 
 
+def print_formatted_reports(type_of_report, street="", id_meter=-1):
 
-def printFormatedReports(typeOfReport, street="", idMeter=-1):
-
-    if (typeOfReport == "street") and (street != ""):
-        dict = getReportForSpecificStreet(street, "DataBase.db")
-        printReportForSpecificStreet(street, dict)
+    if (type_of_report == "street") and (street != ""):
+        dictionary = get_report_for_specific_street(street, "DataBase.db")
+        print_report_for_specific_street(street, dictionary)
         return
 
-    elif (typeOfReport == "id") and (idMeter != -1):
-        dict = getReportForSpecificMeter(idMeter, "DataBase.db")
-        printReportForSpecificMeter(idMeter, dict)
+    elif (type_of_report == "id") and (id_meter != -1):
+        dictionary = get_report_for_specific_meter(id_meter, "DataBase.db")
+        print_report_for_specific_meter(id_meter, dict)
         return
 
     else:
