@@ -39,27 +39,51 @@ def send_data(conn,idCounter,currentWaterCounsuption, month):
        print(e)
 
 
-
+def input_num(number, upper_limit=None):
+    user_input = int(number)
+    if user_input <= 0 or (upper_limit is not None and user_input > upper_limit):
+        raise InputOutOfRange
+    return user_input
 
 
 if __name__ == "__main__": 
 
-
     conn = open_connection()
 
-    while(True):
+    while True:
         print("Enter the number of action: ")
         print("1 - Input and send data: ")
         print("2 - Exit")
         try:
             action = int(input())
-            if(action == 2):
+            if action == 2:
                 break
             print("Water meter ID: ")
             idCounter=int(input())
             print("Water consumption for that meter ID: ")
-            currentWaterCounsuption= float(input())
-            send_data(conn,idCounter,currentWaterCounsuption)
+            currentWaterCounsuption = float(input())
+            print("Month [1-12] in which measurement took place: ")
+            month = 0
+            while True:
+                try:
+                    month = input_num(input(), 12)
+                    break
+                except Exception as e:
+                    print(e)
+                    print("Please retry the input")
+
+            send_data(conn, idCounter, currentWaterCounsuption, month)
             print("Data successfully sent")
         except:
             print("You have to enter number!")
+
+
+class InputOutOfRange(Exception):
+    def __init__(self, message=None):
+        self.message = message
+
+    def __str__(self):
+        if self.message is None:
+            return "Input number is out of option range"
+        return self.message
+    
