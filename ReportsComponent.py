@@ -102,3 +102,52 @@ def print_formatted_reports(type_of_report, street="", id_meter=-1):
 
     else:
         raise WrongNumberOfArguments()
+
+
+def input_num(number, upper_limit=None):
+    user_input = int(number)
+    if user_input <= 0 or (upper_limit is not None and user_input > upper_limit):
+        raise InputOutOfRange
+    return user_input
+
+
+def main():
+    user_input = 0
+    while True:
+        print("Enter number in front of desired report")
+        print("1. Report for monthly consumption of a single street")
+        print("2. Report for consumption throughout months for one water meter")
+
+        while True:
+            try:
+                user_input = input_num(input(), 2)
+                break
+            except Exception as e:
+                print(e)
+
+        if user_input == 1:
+            print("Input street name")
+            # validation and return value should be double-checked (open to discussion)
+            street_name = input()
+            printReportForSpecificStreet(street_name, getReportForSpecificStreet(street_name, 'DataBase.db'))
+            pass
+        elif user_input == 2:
+            print("Input water meter id")
+            # validation and return value should be double-checked (open to discussion)
+            id_meter = input()
+            printReportForSpecificMeter(id_meter, getReportForSpecificMeter(id_meter, 'DataBase.db'))
+            pass
+
+
+if __name__ == "__main__":
+    main()
+
+
+class InputOutOfRange(Exception):
+    def __init__(self, message=None):
+        self.message = message
+
+    def __str__(self):
+        if self.message is None:
+            return "Input number is out of option range"
+        return self.message
