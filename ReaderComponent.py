@@ -41,7 +41,7 @@ def writeToDatabase(data):
             cursor.execute("INSERT INTO WATER_CONSUMPTION (idMeter, consumption, month) VALUES (:idMeter, :consumption, :month);",
                            {'idMeter': dictionary["idMeter"], 'consumption': dictionary["consumption"], 'month': dictionary["month"]})
             conn.commit()
-            disconnectFromDatabase(conn)
+        disconnectFromDatabase(conn)
     except Exception as e:
         print(e)
 
