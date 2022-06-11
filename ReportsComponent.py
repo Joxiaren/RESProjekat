@@ -14,18 +14,28 @@ def close_connection_to_db(conn):
 
 def get_report_for_specific_street(street, db_name):
      # should return Dictionary<string, float> with name of month as a key and water consumption in specific STREET as value
-    if(type(street)!=str):
+    if type(street)!=str:
         raise TypeError("Street should be a string!")
-    if(type(db_name)!=str):
+    if type(db_name)!=str:
         raise TypeError("DB name should be a string!")
-    if(db_name!="Database.db" and db_name!="testDataBase.db"):
+    if db_name!="Database.db" and db_name!="testDataBase.db" :
         raise(sqlite3.OperationalError("Incorrect DB name!"))
     
     conn = open_connection_to_db(db_name)
     cursor=conn.cursor()
+    
+    #if the given street name does not exist in the database, throw exception
+
+    cursor.execute('''select streetName 
+    from WATER_METER 
+    where streetName = ?''',([street]))
+    street = cursor.fetchall()
+    if street == None:
+        raise(sqlite3.DataError("The street does not exist!"))
+
     cursor.execute('''select month,sum(consumption)
     from WATER_CONSUMPTION as wc, WATER_METER as wm
-    where wc.idMeter = wm.idMeter and wm.streetName:=street
+    where wc.idMeter = wm.idMeter and wm.streetName=:street
     GROUP BY month;''',{"street":street})
     listOfMonths=cursor.fetchall()
     #we need to check what returns the DB if we enter the nonexsistent street!
