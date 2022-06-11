@@ -33,13 +33,18 @@ def main():
     replicator_receiver = ReplicatorReceiver()
     replicator_conn = replicator_receiver.open_connection()
     sent_items = []
+    to_send = []
 
     while True:
         for data in data_list:
             if data.timestamp - time.time() <= 10:  # see if time expired
-                replicator_receiver.send_data(replicator_conn, data.dictionary)
-                print("Data to the Reader is sent! [{}]".format(data.dictionary))
+                to_send.append(data.dictionary)
+                print("Data to the Reader is ready to send! [{}]".format(data.dictionary))
                 sent_items.append(data)  # add sent items to the buffer
+
+        replicator_receiver.send_data(replicator_conn, to_send)
+        print("Data to the reader has been sent!")
+        to_send.clear()
 
         if len(sent_items) > 0:  # buffer not empty?
             for sent_item in sent_items:  # iterate through the buffer and delete those items from the data_list
