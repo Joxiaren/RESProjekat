@@ -16,9 +16,24 @@ class TestReportSpecificStreet(unittest.TestCase):
         self.assertRaises(sqlite3.OperationalError,ReportsComponent.get_report_for_specific_street,"Bulevar Oslobodjenja","invalid.db")
     def test_invalid_street_name(self):
         self.assertRaises(sqlite3.DataError,ReportsComponent.get_report_for_specific_street,"Bulevar Oslobodjenja","testDataBase.db")
-    #def test_ok(self):
-        #maybe we should call a script which fills in the data into the test DB
-        #and see if it returns what is expected
+    def test_ok(self):
+        #see if the funciton that returns report gets proper values
+        report = {
+        'January': 24.5,
+        'February': 100.2,
+        'March': 2432.2,
+        'April': 23.2,
+        'May': 78.2,
+        'June': 1242.2,
+        'July': 12.2,
+        'August': 546.3,
+        'September': 234.02,
+        'October': 98.2,
+        'November': 4.0,
+        'December': 15.2
+        }
+        self.assertEqual(ReportsComponent.get_report_for_specific_street("Cegarskih junaka","testDataBase.db"),report)
+
 
 if __name__ == '__main__':
     unittest.main()
