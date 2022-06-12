@@ -26,6 +26,19 @@ def get_report_for_specific_meter(id_meter, db_name):
     if db_name != "DataBase.db" and db_name != "testDataBase.db":
         raise sqlite3.OperationalError("Incorrect name of DB")
 
+    conn = open_connection_to_db(db_name)
+    cursor = conn.cursor()
+
+    cursor.execute('''
+              select idMeter
+              from WATER_CONSUMPTION
+              where idMeter = :idMeter;''', {'idMeter': id_meter})
+
+    id_meter_list = cursor.fetchall()
+
+    if len(id_meter_list) == 0:
+        raise sqlite3.DataError(f"There is no meter with id: {id_meter} ")
+
     report = {
         'January': 0,
         'February': 0,
@@ -41,8 +54,7 @@ def get_report_for_specific_meter(id_meter, db_name):
         'December': 0
     }
 
-    conn = open_connection_to_db(db_name)
-    cursor = conn.cursor()
+
     cursor.execute('''select month, consumption
                from water_consumption 
                where idMeter = :idMeter''', {'idMeter': id_meter})
@@ -129,13 +141,13 @@ def main():
             print("Input street name")
             # validation and return value should be double-checked (open to discussion)
             street_name = input()
-            printReportForSpecificStreet(street_name, getReportForSpecificStreet(street_name, 'DataBase.db'))
+            print_report_for_specific_street(street_name, get_report_for_specific_street(street_name, 'DataBase.db'))
             pass
         elif user_input == 2:
             print("Input water meter id")
             # validation and return value should be double-checked (open to discussion)
-            id_meter = input()
-            printReportForSpecificMeter(id_meter, getReportForSpecificMeter(id_meter, 'DataBase.db'))
+            id_meter = int(input())
+            print_report_for_specific_meter(id_meter, get_report_for_specific_meter(id_meter, 'DataBase.db'))
             pass
 
 
