@@ -7,7 +7,7 @@ conn = MagicMock()
 conn.cursor = MagicMock()
 conn.cursor.execute = MagicMock()
 ReaderComponent.connectToDatabase = MagicMock()
-cursor = MAgic
+cursor = MagicMock()
 cursor.execute = MagicMock()
 conn.commit = MagicMock()
 class MyTestCase(unittest.TestCase):
