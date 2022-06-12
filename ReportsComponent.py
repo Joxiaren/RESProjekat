@@ -29,10 +29,10 @@ def get_report_for_specific_street(street, db_name):
     cursor.execute('''select streetName 
     from WATER_METER 
     where streetName = :streetName;''',{'streetName':street})
-    street = cursor.fetchall()
-    if cursor.rowcount==0:
+    streets = cursor.fetchall()
+    if len(streets)==0:
         raise(sqlite3.DataError("The street does not exist!"))
-    #conn.commit()
+    conn.commit()
     cursor.execute('''select month,sum(consumption)
     from WATER_CONSUMPTION as wc, WATER_METER as wm
     where wc.idMeter = wm.idMeter and wm.streetName = :streetName
@@ -58,7 +58,7 @@ def get_report_for_specific_street(street, db_name):
         report[monthConsumption[0]]=monthConsumption[1]
     
     close_connection_to_db(conn)
-
+    print(report)
     return report
 
 
