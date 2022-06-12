@@ -22,21 +22,22 @@ def get_report_for_specific_meter(id_meter, db_name):
     conn = open_connection_to_db(db_name)
     cursor = conn.cursor()
 
-    cursor.execute('''
-            select idMeter
-            from WATER_CONSUMPTION
-            where idMeter = :idMeter;''', {'idMeter': id_meter})
-
-    id_meter_list = cursor.fetchall()
-
-    if len(id_meter_list) == 0:
-        raise sqlite3.DataError(f"There is no meter with id: {id_meter} ")
     if type(id_meter) != int:
         raise TypeError("Id Meter have to be whole number ")
     if type(db_name) != str:
         raise TypeError("Name of DB have to be string!")
     if db_name != "DataBase.db" and db_name != "testDataBase.db":
         raise sqlite3.OperationalError("Incorrect name of DB")
+
+    cursor.execute('''
+              select idMeter
+              from WATER_CONSUMPTION
+              where idMeter = :idMeter;''', {'idMeter': id_meter})
+
+    id_meter_list = cursor.fetchall()
+
+    if len(id_meter_list) == 0:
+        raise sqlite3.DataError(f"There is no meter with id: {id_meter} ")
 
     report = {
         'January': 0,
