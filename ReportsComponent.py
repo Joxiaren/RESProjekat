@@ -19,15 +19,15 @@ def get_report_for_specific_street(street, db_name):
 
 def get_report_for_specific_meter(id_meter, db_name):
     # should return Dictionary<string, float> with name of month as a key and water consumption on specific COUNTER as value
-    conn = open_connection_to_db(db_name)
-    cursor = conn.cursor()
-
     if type(id_meter) != int:
         raise TypeError("Id Meter have to be whole number ")
     if type(db_name) != str:
         raise TypeError("Name of DB have to be string!")
     if db_name != "DataBase.db" and db_name != "testDataBase.db":
         raise sqlite3.OperationalError("Incorrect name of DB")
+
+    conn = open_connection_to_db(db_name)
+    cursor = conn.cursor()
 
     cursor.execute('''
               select idMeter
