@@ -31,7 +31,7 @@ def get_report_for_specific_meter(id_meter, db_name):
 
     cursor.execute('''
               select idMeter
-              from WATER_CONSUMPTION
+              from WATER_METER
               where idMeter = :idMeter;''', {'idMeter': id_meter})
 
     id_meter_list = cursor.fetchall()
