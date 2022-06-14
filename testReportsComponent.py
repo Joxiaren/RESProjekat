@@ -3,7 +3,9 @@ import unittest
 import sqlite3
 import ReportsComponent
 import CreateTestDataBase
-import os
+import os.path
+from os import path
+
 
 
 class TestReportSpecificStreet(unittest.TestCase):
@@ -73,6 +75,7 @@ class TestReportForSpecificIdCounter(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    CreateTestDataBase.main()
+    if not(path.exists("testDataBase.db")):
+        CreateTestDataBase.main()
     unittest.main()
     #os.remove(os.getcwd(),"testDataBase.db") This line od code is not working, I guess script does not have permissions to remove .db file
