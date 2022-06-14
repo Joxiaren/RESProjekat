@@ -71,6 +71,19 @@ def get_report_for_specific_meter(id_meter, db_name):
     if db_name != "DataBase.db" and db_name != "testDataBase.db":
         raise sqlite3.OperationalError("Incorrect name of DB")
 
+    conn = open_connection_to_db(db_name)
+    cursor = conn.cursor()
+
+    cursor.execute('''
+              select idMeter
+              from WATER_METER
+              where idMeter = :idMeter;''', {'idMeter': id_meter})
+
+    id_meter_list = cursor.fetchall()
+
+    if len(id_meter_list) == 0:
+        raise sqlite3.DataError(f"There is no meter with id: {id_meter} ")
+
     report = {
         'January': 0,
         'February': 0,
@@ -86,8 +99,7 @@ def get_report_for_specific_meter(id_meter, db_name):
         'December': 0
     }
 
-    conn = open_connection_to_db(db_name)
-    cursor = conn.cursor()
+
     cursor.execute('''select month, consumption
                from water_consumption 
                where idMeter = :idMeter''', {'idMeter': id_meter})
@@ -147,3 +159,52 @@ def print_formatted_reports(type_of_report, street="", id_meter=-1):
 
     else:
         raise WrongNumberOfArguments()
+
+
+def input_num(number, upper_limit=None):
+    user_input = int(number)
+    if user_input <= 0 or (upper_limit is not None and user_input > upper_limit):
+        raise InputOutOfRange
+    return user_input
+
+
+def main():
+    user_input = 0
+    while True:
+        print("Enter number in front of desired report")
+        print("1. Report for monthly consumption of a single street")
+        print("2. Report for consumption throughout months for one water meter")
+
+        while True:
+            try:
+                user_input = input_num(input(), 2)
+                break
+            except Exception as e:
+                print(e)
+
+        if user_input == 1:
+            print("Input street name")
+            # validation and return value should be double-checked (open to discussion)
+            street_name = input()
+            print_report_for_specific_street(street_name, get_report_for_specific_street(street_name, 'DataBase.db'))
+            pass
+        elif user_input == 2:
+            print("Input water meter id")
+            # validation and return value should be double-checked (open to discussion)
+            id_meter = int(input())
+            print_report_for_specific_meter(id_meter, get_report_for_specific_meter(id_meter, 'DataBase.db'))
+            pass
+
+
+if __name__ == "__main__":
+    main()
+
+
+class InputOutOfRange(Exception):
+    def __init__(self, message=None):
+        self.message = message
+
+    def __str__(self):
+        if self.message is None:
+            return "Input number is out of option range"
+        return self.message

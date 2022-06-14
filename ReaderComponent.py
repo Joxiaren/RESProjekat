@@ -17,9 +17,9 @@ class ReaderComponentService(rpyc.Service):
     def exposed_print_message(self, message):
         print(message)
 
-    #def exposed_send_to_database(self, data):
-        #print("successfully received data")
-        #print(data)
+    def exposed_send_to_reader(self, data):
+        print("successfully received data")
+        print(data)
         # data check
         # send to temporary storage
         # send_to_temp_storage(data)
@@ -50,7 +50,6 @@ def write_to_database(data):
         disconnect_from_database(conn)
     except Exception as e:
         print(e)
-
 
 if __name__ == "__main__":
     server = ThreadedServer(ReaderComponentService(), port=42277)
