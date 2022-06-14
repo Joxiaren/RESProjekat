@@ -2,7 +2,7 @@ from time import sleep
 import unittest
 import sqlite3
 import ReportsComponent
-import CreateTestBase
+import CreateTestDataBase
 import os
 
 
@@ -73,6 +73,6 @@ class TestReportForSpecificIdCounter(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    CreateTestBase.main()
+    CreateTestDataBase.main()
     unittest.main()
-    #os.remove(os.getcwd(),"testDataBase.db")
+    #os.remove(os.getcwd(),"testDataBase.db") This line od code is not working, I guess script does not have permissions to remove .db file
