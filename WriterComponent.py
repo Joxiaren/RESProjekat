@@ -13,13 +13,13 @@ def check_input_data(idCounter,currentWaterCounsuption, month):
 def open_connection():
     # connecting to ReplicatorSenderService
     conn = rpyc.connect("localhost", 22277)
-    print("Writer connected.")
+    print("Writer connected to ReplicatorSender.")
     return conn
 
 def close_connection(conn):
     # disconnecting from ReplicatorSenderService
     del conn
-    print("Writer disconnected.")
+    print("Writer disconnected from ReplicatorSender.")
 
 def input_data():
     pass

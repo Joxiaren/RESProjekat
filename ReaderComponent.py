@@ -6,12 +6,12 @@ from rpyc.utils.server import ThreadedServer
 class ReaderComponentService(rpyc.Service):
     def on_connect(self, conn):
         # code that runs when service is connected
-        print("i am connected")
+        print("Reader connected")
         pass
 
     def on_disconnect(self, conn):
         # code that runs when service is disconnected
-        print("i am disconnected")
+        print("Reader disconnected")
         pass
 
     def exposed_print_message(self, message):
@@ -19,7 +19,8 @@ class ReaderComponentService(rpyc.Service):
 
     def exposed_send_to_reader(self, data):
         print("successfully received data")
-        print(data)
+        # print(data)
+        return
         # data check
         # send to temporary storage
         # send_to_temp_storage(data)
@@ -52,6 +53,6 @@ def write_to_database(data):
         print(e)
 
 if __name__ == "__main__":
-    server = ThreadedServer(ReaderComponentService(), port=42277)
+    server = ThreadedServer(ReaderComponentService(), port=32277)
     print("server started")
     server.start()
