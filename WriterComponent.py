@@ -9,6 +9,27 @@ def check_input_data(idCounter,currentWaterCounsuption, month):
         raise TypeError("The consumption is not a number!")
     return idCounter,currentWaterCounsuption, month
 
+def convert_to_month_name(month):
+    if(type(month) != int):
+        raise TypeError("Month input has to be whole number!")
+
+    converter = {
+         1: 'January',
+         2: 'February',
+         3: 'March',
+         4: 'April',
+         5: 'May',
+         6: 'June',
+         7: 'July',
+         8: 'August',
+         9: 'September',
+         10: 'October',
+         11: 'November',
+         12: 'December'
+    }
+
+    month_name = converter[month]
+    return month_name
 
 def open_connection():
     # connecting to ReplicatorSenderService
@@ -72,7 +93,7 @@ if __name__ == "__main__":
                     print(e)
                     print("Please retry the input")
 
-            send_data(conn, idCounter, currentWaterCounsuption, month)
+            send_data(conn, idCounter, currentWaterCounsuption, convert_to_month_name(month))
             print("Data successfully sent")
         except:
             print("You have to enter number!")
