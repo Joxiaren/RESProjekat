@@ -58,7 +58,6 @@ def get_report_for_specific_street(street, db_name):
         report[monthConsumption[0]]=monthConsumption[1]
     
     close_connection_to_db(conn)
-    print(report)
     return report
 
 
@@ -154,7 +153,7 @@ def print_formatted_reports(type_of_report, street="", id_meter=-1):
 
     elif (type_of_report == "id") and (id_meter != -1):
         dictionary = get_report_for_specific_meter(id_meter, "DataBase.db")
-        print_report_for_specific_meter(id_meter, dict)
+        print_report_for_specific_meter(id_meter, dictionary)
         return
 
     else:
