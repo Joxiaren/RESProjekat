@@ -1,13 +1,13 @@
 import rpyc
 
-def check_input_data(idCounter,currentWaterCounsuption, month):
+def check_input_data(idCounter,waterCounsuption, month):
     if type(idCounter)!=int:
         raise TypeError("Water meter ID must be an integer!")
-    if type(currentWaterCounsuption)==int or type(currentWaterCounsuption)==float:
+    if type(waterCounsuption)==int or type(waterCounsuption)==float:
         pass
     else:
         raise TypeError("The consumption is not a number!")
-    return idCounter,currentWaterCounsuption, month
+    return idCounter,waterCounsuption, month
 
 
 def open_connection():

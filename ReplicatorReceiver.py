@@ -29,22 +29,17 @@ class ReplicatorReceiver:
         conn.root.send_to_reader(data)
 
 
-def main():
-    replicator_receiver = ReplicatorReceiver()
-    replicator_conn = replicator_receiver.open_connection()
-    sent_items = []
-    to_send = []
-
-    while True:
+def try_send_data(to_send,sent_items,replicator_receiver,replicator_conn):
+    if len(data_list) > 0:
         for data in data_list:
-            if data.timestamp - time.time() <= 10:  # see if time expired
+            if time.time() - data.timestamp >= 10:  # see if time expired
                 to_send.append(data.dictionary)
-                print("Data to the Reader is ready to send! [{}]".format(data.dictionary))
+                # print("Data to the Reader is ready to send! [{}]".format(data.dictionary))
                 sent_items.append(data)  # add sent items to the buffer
-
-        replicator_receiver.send_data(replicator_conn, to_send)
-        print("Data to the reader has been sent!")
-        to_send.clear()
+        if len(to_send) > 0:
+            replicator_receiver.send_data(replicator_conn, to_send)
+            print("Data to the reader has been sent!")
+            to_send.clear()
 
         if len(sent_items) > 0:  # buffer not empty?
             for sent_item in sent_items:  # iterate through the buffer and delete those items from the data_list
@@ -53,6 +48,17 @@ def main():
             sent_items = []  # zero the buffer
 
 
+def main():
+    replicator_receiver = ReplicatorReceiver()
+    replicator_conn = replicator_receiver.open_connection()
+    sent_items = []
+    to_send = []
+
+    while True:
+        try_send_data(to_send,sent_items,replicator_receiver,replicator_conn)
+        time.sleep(1)
+
+        
 if __name__ == "__main__":
     main()
 
