@@ -19,8 +19,12 @@ class ReplicatorSenderService(rpyc.Service):
     def exposed_send_to_replicator(self, data):
         print("successfully received data")
         print(data)
-        # data check
-        # send to temporary storage
+        conn = rpyc.connect('localhost', 22278)
+        print("opened connection to ReplicatorReceiver")
+        conn.root.temporary_store_data(data)
+        print("Data sent")
+        del conn
+        print("Closed connection to ReplicatorReceiver")
         # send_to_temp_storage(data)
 
 

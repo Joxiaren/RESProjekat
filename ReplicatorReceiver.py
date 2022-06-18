@@ -1,5 +1,7 @@
 import time
 import rpyc
+from rpyc.utils.server import ThreadedServer
+from threading import Thread
 
 data_list = []
 
@@ -22,14 +24,24 @@ class ReplicatorReceiver:
         del conn
         print("Replicator receiver disconnected.")
 
-    def temporary_store_data(self, data):
-        data_list.append(Data(data, time.time()))
+#    def temporary_store_data(self, data):
+#        data_list.append(Data(data, time.time()))
 
     def send_data(self, conn, data):
         conn.root.send_to_reader(data)
 
 
+class DataService(rpyc.Service):
+    def exposed_temporary_store_data(self, data):
+        data_list.append(Data(data, time.time()))
+
+
 def main():
+    listener_server = ThreadedServer(DataService(), port=22278)
+    thread_listener = Thread(target=lambda: listener_server.start(), daemon=True)
+    thread_listener.start()
+    print("listener ready")
+
     replicator_receiver = ReplicatorReceiver()
     replicator_conn = replicator_receiver.open_connection()
     sent_items = []
