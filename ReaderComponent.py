@@ -19,17 +19,17 @@ class ReaderComponentService(rpyc.Service):
         print(message)
 
     def exposed_send_to_reader(self, data):
+
         print("Reader: Successfully received data")
         write_to_database(data)
         print(data)
         return
-
 def connect_to_database(db_name):
     connection_string = 'file:%s?mode=rw' % db_name
     conn = sqlite3.connect(connection_string, uri=True)
     return conn
 
-
+  
 def disconnect_from_database(conn):
     conn.close()
     return
