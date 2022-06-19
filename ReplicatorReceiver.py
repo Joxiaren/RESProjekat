@@ -39,7 +39,7 @@ class DataService(rpyc.Service):
         data_list.append(Data(data, time.time()))
 
 
-def try_send_data(to_send,sent_items,replicator_receiver,replicator_conn):
+def try_send_data(to_send, sent_items, replicator_receiver, replicator_conn):
     if len(data_list) > 0:
         for data in data_list:
             if time.time() - data.timestamp >= 10:  # see if time expired
@@ -73,5 +73,5 @@ def main():  # pragma: no cover
         time.sleep(1)
 
         
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     main()
