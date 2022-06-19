@@ -1,3 +1,4 @@
+import copy
 import time
 import rpyc
 from rpyc.utils.server import ThreadedServer
@@ -24,23 +25,23 @@ class ReplicatorReceiver:
         del conn
         print("Replicator receiver disconnected.")
 
-#    def temporary_store_data(self, data):
-#        data_list.append(Data(data, time.time()))
-
     def send_data(self, conn, data):
-        conn.root.send_to_reader(data)
+        for s in data:
+            conn.root.send_to_reader(s)
+        print("sent data")
         return
 
 
 class DataService(rpyc.Service):
     def exposed_temporary_store_data(self, data):
         print("Got data")
-        print(data)
-        data_list.append(Data(data, time.time()))
+        data_copy = copy.deepcopy(data)
+        print(data_copy)
+        data_list.append(Data(data_copy, time.time()))
 
 
 def main():
-    listener_server = ThreadedServer(DataService(), port=22278)
+    listener_server = ThreadedServer(DataService(), port=22278, protocol_config={"allow_public_attrs": True, "allow_all_attrs" : True})
     thread_listener = Thread(target=lambda: listener_server.start(), daemon=True)
     thread_listener.start()
     print("listener ready")
@@ -54,11 +55,12 @@ def main():
         if len(data_list) > 0:
             for data in data_list:
                 if time.time() - data.timestamp >= 10:  # see if time expired
-                    to_send.append(data.dictionary)
+                    to_send.append(copy.deepcopy(data.dictionary))
                     # print("Data to the Reader is ready to send! [{}]".format(data.dictionary))
                     sent_items.append(data)  # add sent items to the buffer
             if len(to_send) > 0:
-                replicator_receiver.send_data(replicator_conn, to_send)
+                to_send_copy = copy.deepcopy(to_send)
+                replicator_receiver.send_data(replicator_conn, to_send_copy)
                 print("Data to the reader has been sent!")
                 to_send.clear()
 

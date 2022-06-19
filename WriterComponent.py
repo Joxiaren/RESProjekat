@@ -34,7 +34,9 @@ def send_data(conn,idCounter,currentWaterCounsuption, month):
             "consumption" : wc,
             "month" : month
         }
-        conn.root.send_to_replicator(dict)
+        #dict_as_string = f"idMeter:{id},consumption:{wc},month:{month}"
+        tup = (id, wc, month)
+        conn.root.send_to_replicator(tup)
     except TypeError as e:
        print(e)
 

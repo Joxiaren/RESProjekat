@@ -1,3 +1,5 @@
+import copy
+
 import rpyc
 from rpyc.utils.server import ThreadedServer
 
@@ -21,7 +23,8 @@ class ReplicatorSenderService(rpyc.Service):
         print(data)
         conn = rpyc.connect('localhost', 22278)
         print("Opened connection to ReplicatorReceiver")
-        conn.root.temporary_store_data(data)
+        data_copy = copy.deepcopy(data)
+        conn.root.temporary_store_data(data_copy)
         print("Data sent")
         del conn
         print("Closed connection to ReplicatorReceiver")
@@ -29,7 +32,7 @@ class ReplicatorSenderService(rpyc.Service):
 
 
 def main():
-    server = ThreadedServer(ReplicatorSenderService(), port=22277)
+    server = ThreadedServer(ReplicatorSenderService(), port=22277, protocol_config={"allow_public_attrs": True, "allow_all_attrs" : True})
     print("server started")
     server.start()
 
