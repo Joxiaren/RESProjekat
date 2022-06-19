@@ -17,13 +17,13 @@ class ReplicatorReceiver:
     def open_connection(self):
         # connecting to ReaderService
         conn = rpyc.connect("localhost", 32277)
-        print("Replicator receiver connected.")
+        print("ReplicatorReceiver: Connected.")
         return conn
 
     def close_connection(self, conn):
         # disconnecting from ReaderService
         del conn
-        print("Replicator receiver disconnected.")
+        print("ReplicatorReceiver: Disconnected.")
 
     def send_data(self, conn, data):
         for s in data:
@@ -34,17 +34,15 @@ class ReplicatorReceiver:
 
 class DataService(rpyc.Service):
     def exposed_temporary_store_data(self, data):
-        print("Got data")
-        data_copy = copy.deepcopy(data)
-        print(data_copy)
-        data_list.append(Data(data_copy, time.time()))
+        print("ReplicatorReceiver: Received data.")
+        print(data)
+        data_list.append(Data(data, time.time()))
 
 
 def main():
-    listener_server = ThreadedServer(DataService(), port=22278, protocol_config={"allow_public_attrs": True, "allow_all_attrs" : True})
+    listener_server = ThreadedServer(DataService(), port=22278)
     thread_listener = Thread(target=lambda: listener_server.start(), daemon=True)
     thread_listener.start()
-    print("listener ready")
 
     replicator_receiver = ReplicatorReceiver()
     replicator_conn = replicator_receiver.open_connection()
@@ -61,13 +59,13 @@ def main():
             if len(to_send) > 0:
                 to_send_copy = copy.deepcopy(to_send)
                 replicator_receiver.send_data(replicator_conn, to_send_copy)
-                print("Data to the reader has been sent!")
+                print("ReplicatorReceiver: Data to the reader has been sent!")
                 to_send.clear()
 
             if len(sent_items) > 0:  # buffer not empty?
                 for sent_item in sent_items:  # iterate through the buffer and delete those items from the data_list
                     data_list.remove(sent_item)  # and remove them
-                    print("Removed [{}]".format(sent_item))
+                    print("ReplicatorReceiver: Removed [{}]".format(sent_item))
                 sent_items = []  # zero the buffer
         time.sleep(1)
 

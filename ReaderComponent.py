@@ -7,21 +7,20 @@ from rpyc.utils.server import ThreadedServer
 class ReaderComponentService(rpyc.Service):
     def on_connect(self, conn):
         # code that runs when service is connected
-        print("Reader connected")
+        print("Reader: Connected")
         pass
 
     def on_disconnect(self, conn):
         # code that runs when service is disconnected
-        print("Reader disconnected")
+        print("Reader: Disconnected")
         pass
 
     def exposed_print_message(self, message):
         print(message)
 
     def exposed_send_to_reader(self, data):
-        print("successfully received data")
-        data_copy = copy.deepcopy(data)
-        write_to_database(data_copy)
+        print("Reader: Successfully received data")
+        write_to_database(data)
         print(data)
         return
 
@@ -44,11 +43,12 @@ def write_to_database(data):
         cursor.execute("INSERT INTO WATER_CONSUMPTION (idMeter, consumption, month) VALUES (:idMeter, :consumption, :month);",
                            {'idMeter': data[0], 'consumption': data[1], 'month': data[2]})
         conn.commit()
+        print("Reader: Successfully inserted data")
         disconnect_from_database(conn)
     except Exception as e:
         print(e)
 
 if __name__ == "__main__":
-    server = ThreadedServer(ReaderComponentService(), port=32277, protocol_config={"allow_public_attrs": True, "allow_all_attrs" : True})
+    server = ThreadedServer(ReaderComponentService(), port=32277)
     print("server started")
     server.start()
