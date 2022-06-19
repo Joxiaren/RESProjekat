@@ -1,4 +1,3 @@
-import copy
 import time
 import rpyc
 from rpyc.utils.server import ThreadedServer
@@ -14,13 +13,13 @@ class Data:
 
 
 class ReplicatorReceiver:
-    def open_connection(self): # pragma: no cover
+    def open_connection(self):  # pragma: no cover
         # connecting to ReaderService
         conn = rpyc.connect("localhost", 32277)
         print("ReplicatorReceiver: Connected.")
         return conn
 
-    def close_connection(self, conn): # pragma: no cover
+    def close_connection(self, conn):  # pragma: no cover
         # disconnecting from ReaderService
         del conn
         print("ReplicatorReceiver: Disconnected.")
@@ -28,7 +27,7 @@ class ReplicatorReceiver:
     def send_data(self, conn, data):
         for s in data:
             conn.root.send_to_reader(s)
-        print("sent data")
+        print("ReplicatorReceiver: Sent data")
         return
 
 
@@ -69,7 +68,7 @@ def main():  # pragma: no cover
     to_send = []
 
     while True:
-        try_send_data(to_send,sent_items,replicator_receiver,replicator_conn)
+        try_send_data(to_send, sent_items, replicator_receiver, replicator_conn)
         time.sleep(1)
 
         

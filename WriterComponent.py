@@ -1,16 +1,18 @@
 import rpyc
 
-def check_input_data(idCounter,waterCounsuption, month):
-    if type(idCounter)!=int:
+
+def check_input_data(id_counter, water_counsuption, month):
+    if type(id_counter) != int:
         raise TypeError("Water meter ID must be an integer!")
-    if type(waterCounsuption)==int or type(waterCounsuption)==float:
+    if type(water_counsuption) == int or type(water_counsuption) == float:
         pass
     else:
         raise TypeError("The consumption is not a number!")
-    return idCounter,waterCounsuption, month
+    return id_counter, water_counsuption, month
+
 
 def convert_to_month_name(month):
-    if(type(month) != int):
+    if type(month) != int:
         raise TypeError("Month input has to be whole number!")
 
     converter = {
@@ -31,35 +33,28 @@ def convert_to_month_name(month):
     month_name = converter[month]
     return month_name
 
-def open_connection(): # pragma: no cover
+
+def open_connection():  # pragma: no cover
     # connecting to ReplicatorSenderService
     conn = rpyc.connect("localhost", 22277)
     print("Writer connected to ReplicatorSender.")
     return conn
 
-def close_connection(conn): # pragma: no cover
+
+def close_connection(conn):  # pragma: no cover
     # disconnecting from ReplicatorSenderService
     del conn
     print("Writer disconnected from ReplicatorSender.")
 
-def input_data(): # pragma: no cover
-    pass
 
-
-def send_data(conn,idCounter,currentWaterCounsuption, month):
+def send_data(conn, id_counter, current_water_consumption, month):
     # here we should call function input_Data()
     try:
-        id, wc, month = check_input_data(idCounter,currentWaterCounsuption, month)
-        dict = {
-            "idMeter" : id,
-            "consumption" : wc,
-            "month" : month
-        }
-        #dict_as_string = f"idMeter:{id},consumption:{wc},month:{month}"
+        id, wc, month = check_input_data(id_counter, current_water_consumption, month)
         tup = (id, wc, month)
         conn.root.send_to_replicator(tup)
     except TypeError as e:
-       print(e)
+        print(e)
 
 
 def input_num(number, upper_limit=None):
@@ -69,7 +64,7 @@ def input_num(number, upper_limit=None):
     return user_input
 
 
-if __name__ == "__main__": # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
 
     while True:
         print("Enter the number of action: ")
@@ -83,9 +78,9 @@ if __name__ == "__main__": # pragma: no cover
             conn = open_connection()
             print("Opened connection")
             print("Water meter ID: ")
-            idCounter=int(input())
+            id_counter = int(input())
             print("Water consumption for that meter ID: ")
-            currentWaterCounsuption = float(input())
+            current_water_consumption = float(input())
             print("Month [1-12] in which measurement took place: ")
             month = 0
             while True:
@@ -96,7 +91,7 @@ if __name__ == "__main__": # pragma: no cover
                     print(e)
                     print("Please retry the input")
 
-            send_data(conn, idCounter, currentWaterCounsuption, convert_to_month_name(month))
+            send_data(conn, id_counter, current_water_consumption, convert_to_month_name(month))
             print("Data successfully sent")
             close_connection(conn)
             print("Closed connection")

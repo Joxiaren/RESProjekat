@@ -1,24 +1,19 @@
-import copy
-
 import rpyc
 from rpyc.utils.server import ThreadedServer
 
 
 class ReplicatorSenderService(rpyc.Service):
-    def on_connect(self, conn): # pragma: no cover
+    def on_connect(self, conn):  # pragma: no cover
         # code that runs when service is connected
         print("ReplicatorSender: Received connection")
         pass
 
-    def on_disconnect(self, conn): # pragma: no cover
+    def on_disconnect(self, conn):  # pragma: no cover
         # code that runs when service is disconnected
         print("ReplicatorSender: Disconnected")
         pass
 
-    def exposed_print_message(self, message): # pragma: no cover
-        print(message)
-
-    def exposed_send_to_replicator(self, data): # pragma: no cover
+    def exposed_send_to_replicator(self, data):  # pragma: no cover
         print("ReplicatorSender: Successfully received data")
         print(data)
         conn = rpyc.connect('localhost', 22278)
@@ -30,7 +25,7 @@ class ReplicatorSenderService(rpyc.Service):
         # send_to_temp_storage(data)
 
 
-def main(): # pragma: no cover
+def main():  # pragma: no cover
     server = ThreadedServer(ReplicatorSenderService(), port=22277)
     print("ReplicatorSender: Server started")
     server.start()
