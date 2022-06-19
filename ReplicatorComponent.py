@@ -1,11 +1,11 @@
 import ReplicatorSender
 import ReplicatorReceiver
-import threading
+from threading import Thread
 
 
 def main():
-    thread_sender = threading.Thread(target=ReplicatorSender.main, daemon=True)
-    thread_receiver = threading.Thread(target=ReplicatorReceiver.main, daemon=True)
+    thread_sender = Thread(target=ReplicatorSender.main, daemon=True)
+    thread_receiver = Thread(target=ReplicatorReceiver.main, daemon=True)
     thread_sender.start()
     thread_receiver.start()
 

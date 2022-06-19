@@ -34,13 +34,13 @@ def convert_to_month_name(month):
 def open_connection():
     # connecting to ReplicatorSenderService
     conn = rpyc.connect("localhost", 22277)
-    print("Writer connected.")
+    print("Writer connected to ReplicatorSender.")
     return conn
 
 def close_connection(conn):
     # disconnecting from ReplicatorSenderService
     del conn
-    print("Writer disconnected.")
+    print("Writer disconnected from ReplicatorSender.")
 
 def input_data():
     pass
@@ -55,7 +55,9 @@ def send_data(conn,idCounter,currentWaterCounsuption, month):
             "consumption" : wc,
             "month" : month
         }
-        conn.root.send_to_replicator(dict)
+        #dict_as_string = f"idMeter:{id},consumption:{wc},month:{month}"
+        tup = (id, wc, month)
+        conn.root.send_to_replicator(tup)
     except TypeError as e:
        print(e)
 
@@ -69,16 +71,19 @@ def input_num(number, upper_limit=None):
 
 if __name__ == "__main__": 
 
-    conn = open_connection()
+
 
     while True:
         print("Enter the number of action: ")
         print("1 - Input and send data: ")
         print("2 - Exit")
         try:
-            action = int(input())
+            action = input_num(input(), 2)
             if action == 2:
                 break
+
+            conn = open_connection()
+            print("Opened connection")
             print("Water meter ID: ")
             idCounter=int(input())
             print("Water consumption for that meter ID: ")
@@ -95,6 +100,8 @@ if __name__ == "__main__":
 
             send_data(conn, idCounter, currentWaterCounsuption, convert_to_month_name(month))
             print("Data successfully sent")
+            close_connection(conn)
+            print("Closed connection")
         except:
             print("You have to enter number!")
 
