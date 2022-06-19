@@ -108,7 +108,7 @@ class InputOutOfRange(Exception):
     def __init__(self, message=None):
         self.message = message
 
-    def __str__(self):
+    def __str__(self): # pragma: no cover
         if self.message is None:
             return "Input number is out of option range"
         return self.message
