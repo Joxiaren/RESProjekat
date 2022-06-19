@@ -48,16 +48,19 @@ def input_num(number, upper_limit=None):
 
 if __name__ == "__main__": 
 
-    conn = open_connection()
+
 
     while True:
         print("Enter the number of action: ")
         print("1 - Input and send data: ")
         print("2 - Exit")
         try:
-            action = int(input())
+            action = input_num(input(), 2)
             if action == 2:
                 break
+
+            conn = open_connection()
+            print("Opened connection")
             print("Water meter ID: ")
             idCounter=int(input())
             print("Water consumption for that meter ID: ")
@@ -74,6 +77,8 @@ if __name__ == "__main__":
 
             send_data(conn, idCounter, currentWaterCounsuption, month)
             print("Data successfully sent")
+            close_connection(conn)
+            print("Closed connection")
         except:
             print("You have to enter number!")
 
