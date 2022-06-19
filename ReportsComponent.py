@@ -133,33 +133,6 @@ def print_report_for_specific_meter(id_meter, data):
     return
 
 
-class WrongNumberOfArguments(Exception):
-    def __init__(self, message=None):
-        self.message = message
-
-    def __str__(self):
-        if self.message is None:
-            return "You did not pass correct number of arguments in function call."
-        else:
-            return self.message
-
-
-def print_formatted_reports(type_of_report, street="", id_meter=-1):
-
-    if (type_of_report == "street") and (street != ""):
-        dictionary = get_report_for_specific_street(street, "DataBase.db")
-        print_report_for_specific_street(street, dictionary)
-        return
-
-    elif (type_of_report == "id") and (id_meter != -1):
-        dictionary = get_report_for_specific_meter(id_meter, "DataBase.db")
-        print_report_for_specific_meter(id_meter, dictionary)
-        return
-
-    else:
-        raise WrongNumberOfArguments()
-
-
 def input_num(number, upper_limit=None):
     user_input = int(number)
     if user_input <= 0 or (upper_limit is not None and user_input > upper_limit):
@@ -203,7 +176,7 @@ class InputOutOfRange(Exception):
     def __init__(self, message=None):
         self.message = message
 
-    def __str__(self):
+    def __str__(self): # pragma: no cover
         if self.message is None:
             return "Input number is out of option range"
         return self.message

@@ -145,7 +145,6 @@ class TestCaseInputNum(unittest.TestCase):
     # possible to add test for double input
 
 
-
 if __name__ == '__main__':
     if not(path.exists("testDataBase.db")):
         CreateTestDataBase.main()

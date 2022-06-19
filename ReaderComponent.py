@@ -18,8 +18,7 @@ class ReaderComponentService(rpyc.Service):
     def exposed_print_message(self, message): # pragma: no cover
         print(message)
 
-    def exposed_send_to_reader(self, data):
-
+    def exposed_send_to_reader(self, data): # pragma: no cover
         print("Reader: Successfully received data")
         write_to_database(data)
         print(data)
