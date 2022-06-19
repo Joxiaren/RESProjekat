@@ -14,13 +14,13 @@ class Data:
 
 
 class ReplicatorReceiver:
-    def open_connection(self):
+    def open_connection(self): # pragma: no cover
         # connecting to ReaderService
         conn = rpyc.connect("localhost", 32277)
         print("ReplicatorReceiver: Connected.")
         return conn
 
-    def close_connection(self, conn):
+    def close_connection(self, conn): # pragma: no cover
         # disconnecting from ReaderService
         del conn
         print("ReplicatorReceiver: Disconnected.")
@@ -38,26 +38,27 @@ class DataService(rpyc.Service):
         print(data)
         data_list.append(Data(data, time.time()))
 
-def try_send_data(to_send,sent_items,replicator_receiver,replicator_conn):
-      if len(data_list) > 0:
-          for data in data_list:
-              if time.time() - data.timestamp >= 10:  # see if time expired
-                  to_send.append(data.tup)
-                  # print("Data to the Reader is ready to send! [{}]".format(data.dictionary))
-                  sent_items.append(data)  # add sent items to the buffer
-          if len(to_send) > 0:
-              replicator_receiver.send_data(replicator_conn, to_send)
-              print("ReplicatorReceiver: Data to the reader has been sent!")
-              to_send.clear()
 
-          if len(sent_items) > 0:  # buffer not empty?
-              for sent_item in sent_items:  # iterate through the buffer and delete those items from the data_list
-                  data_list.remove(sent_item)  # and remove them
-                  print("ReplicatorReceiver: Removed [{}]".format(sent_item))
-              sent_items = []  # zero the buffer
+def try_send_data(to_send,sent_items,replicator_receiver,replicator_conn):
+    if len(data_list) > 0:
+        for data in data_list:
+            if time.time() - data.timestamp >= 10:  # see if time expired
+                to_send.append(data.tup)
+                # print("Data to the Reader is ready to send! [{}]".format(data.dictionary))
+                sent_items.append(data)  # add sent items to the buffer
+        if len(to_send) > 0:
+            replicator_receiver.send_data(replicator_conn, to_send)
+            print("ReplicatorReceiver: Data to the reader has been sent!")
+            to_send.clear()
+
+        if len(sent_items) > 0:  # buffer not empty?
+            for sent_item in sent_items:  # iterate through the buffer and delete those items from the data_list
+                data_list.remove(sent_item)  # and remove them
+                print("ReplicatorReceiver: Removed [{}]".format(sent_item))
+            sent_items.clear()  # zero the buffer
 
               
-def main():
+def main():  # pragma: no cover
     listener_server = ThreadedServer(DataService(), port=22278)
     thread_listener = Thread(target=lambda: listener_server.start(), daemon=True)
     thread_listener.start()

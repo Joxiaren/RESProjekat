@@ -5,17 +5,17 @@ from rpyc.utils.server import ThreadedServer
 
 
 class ReaderComponentService(rpyc.Service):
-    def on_connect(self, conn):
+    def on_connect(self, conn): # pragma: no cover
         # code that runs when service is connected
         print("Reader: Connected")
         pass
 
-    def on_disconnect(self, conn):
+    def on_disconnect(self, conn): # pragma: no cover
         # code that runs when service is disconnected
         print("Reader: Disconnected")
         pass
 
-    def exposed_print_message(self, message):
+    def exposed_print_message(self, message): # pragma: no cover
         print(message)
 
     def exposed_send_to_reader(self, data):
@@ -24,13 +24,13 @@ class ReaderComponentService(rpyc.Service):
         write_to_database(data)
         print(data)
         return
-def connect_to_database(db_name):
+def connect_to_database(db_name): # pragma: no cover
     connection_string = 'file:%s?mode=rw' % db_name
     conn = sqlite3.connect(connection_string, uri=True)
     return conn
 
   
-def disconnect_from_database(conn):
+def disconnect_from_database(conn): # pragma: no cover
     conn.close()
     return
 
@@ -48,7 +48,8 @@ def write_to_database(data):
     except Exception as e:
         print(e)
 
-if __name__ == "__main__":
+
+if __name__ == "__main__": # pragma: no cover
     server = ThreadedServer(ReaderComponentService(), port=32277)
     print("server started")
     server.start()

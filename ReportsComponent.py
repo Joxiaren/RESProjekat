@@ -1,13 +1,13 @@
 import sqlite3
 
 
-def open_connection_to_db(db_name):
+def open_connection_to_db(db_name): # pragma: no cover
     connection_string = 'file:%s?mode=rw' % db_name
     conn = sqlite3.connect(connection_string, uri=True)
     return conn
 
 
-def close_connection_to_db(conn):
+def close_connection_to_db(conn): # pragma: no cover
     conn.close()
     return
 
@@ -167,7 +167,7 @@ def input_num(number, upper_limit=None):
     return user_input
 
 
-def main():
+def main(): # pragma: no cover
     user_input = 0
     while True:
         print("Enter number in front of desired report")
@@ -195,7 +195,7 @@ def main():
             pass
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     main()
 
 

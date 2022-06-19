@@ -31,18 +31,18 @@ def convert_to_month_name(month):
     month_name = converter[month]
     return month_name
 
-def open_connection():
+def open_connection(): # pragma: no cover
     # connecting to ReplicatorSenderService
     conn = rpyc.connect("localhost", 22277)
     print("Writer connected to ReplicatorSender.")
     return conn
 
-def close_connection(conn):
+def close_connection(conn): # pragma: no cover
     # disconnecting from ReplicatorSenderService
     del conn
     print("Writer disconnected from ReplicatorSender.")
 
-def input_data():
+def input_data(): # pragma: no cover
     pass
 
 
@@ -69,9 +69,7 @@ def input_num(number, upper_limit=None):
     return user_input
 
 
-if __name__ == "__main__": 
-
-
+if __name__ == "__main__": # pragma: no cover
 
     while True:
         print("Enter the number of action: ")

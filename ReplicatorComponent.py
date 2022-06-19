@@ -3,7 +3,7 @@ import ReplicatorReceiver
 from threading import Thread
 
 
-def main():
+def main(): # pragma: no cover
     thread_sender = Thread(target=ReplicatorSender.main, daemon=True)
     thread_receiver = Thread(target=ReplicatorReceiver.main, daemon=True)
     thread_sender.start()
