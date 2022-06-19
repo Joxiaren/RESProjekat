@@ -25,6 +25,32 @@ class TestDataService(unittest.TestCase):
         self.assertEqual(to_send, [])
         self.assertEqual(sent_items, [])
 
+    @patch("ReplicatorReceiver.data_list", [])
+    @patch("time.time", return_value=15)
+    def test_try_send_data_empty(self, timePatch):
+        to_send = []
+        sent_items = []
+        replicator_receiver = ReplicatorReceiver.ReplicatorReceiver()
+        replicator_conn = MagicMock()
+
+        ReplicatorReceiver.try_send_data(to_send, sent_items, replicator_receiver, replicator_conn)
+
+        self.assertEqual(to_send, [])
+        self.assertEqual(sent_items, [])
+
+    @patch("ReplicatorReceiver.data_list", [ReplicatorReceiver.Data((1, 1, 1), 0)])
+    @patch("time.time", return_value=5)
+    def test_try_send_data_time_not_passed(self, timePatch):
+        to_send = []
+        sent_items = []
+        replicator_receiver = ReplicatorReceiver.ReplicatorReceiver()
+        replicator_conn = MagicMock()
+
+        ReplicatorReceiver.try_send_data(to_send, sent_items, replicator_receiver, replicator_conn)
+
+        self.assertEqual(to_send, [])
+        self.assertEqual(sent_items, [])
+
 
 if __name__=='__main__':
     unittest.main()
